@@ -12,5 +12,6 @@ class Patient extends Model
         'telephone',
         'date_naissance',
         'antecedents',
+        'document_path',
     ];
 }

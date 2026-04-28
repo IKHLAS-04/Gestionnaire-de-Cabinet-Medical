@@ -45,7 +45,7 @@ class PatientController extends Controller
         );
 
         if ($request->hasFile('document')) {
-            $path = $request->file('document')->store('ordonnances', 'private');
+            $path = $request->file('document')->store('documents', 'public');
             $validated['document_path'] = $path;
         }
         //Création du patient dans la base 

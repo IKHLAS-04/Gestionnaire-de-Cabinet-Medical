@@ -8,7 +8,7 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white p-6 shadow sm:rounded-lg">
-                <form action="{{ route('patients.update', $patient->id) }}" method="POST">
+                <form action="{{ route('patients.update', $patient->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT') <div class="grid grid-cols-2 gap-4">
                         <div>
