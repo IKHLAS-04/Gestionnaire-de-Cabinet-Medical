@@ -27,11 +27,7 @@
                                 <td class="p-3 border-b">{{ $patient->prenom }}</td>
                                 <td class="p-3 border-b">{{ $patient->telephone }}</td>
                                 <td class="p-3 border-b">
-                                    @if(Auth::user()->role === 'medecin')
-                                        <span class="text-red-600 font-medium">{{ $patient->antecedents }}</span>
-                                    @else
-                                        <span class="text-gray-400 text-xs italic">Accès restreint (Médecin uniquement)</span>
-                                    @endif
+                                    <span class="text-gray-700">{{ $patient->antecedents }}</span>
                                 </td>
                                 <td class="p-3 border-b">
                                     <form action="{{ route('patients.destroy', $patient->id) }}" method="POST"
