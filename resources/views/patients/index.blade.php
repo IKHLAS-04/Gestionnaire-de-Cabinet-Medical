@@ -16,8 +16,8 @@
                             <th class="p-3 border-b">Nom</th>
                             <th class="p-3 border-b">Prénom</th>
                             <th class="p-3 border-b">Téléphone</th>
-                            <th class="p-3 border-b">Antécédents</th>
-                            <th class="p-3 border-b">Actions</th>
+                            <th class="p-3 border-b">Dossiers</th>
+                            <th class="p-3 border-b text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -26,22 +26,42 @@
                                 <td class="p-3 border-b">{{ $patient->nom }}</td>
                                 <td class="p-3 border-b">{{ $patient->prenom }}</td>
                                 <td class="p-3 border-b">{{ $patient->telephone }}</td>
+
                                 <td class="p-3 border-b">
-                                    <span class="text-gray-700">{{ $patient->antecedents }}</span>
+                                    @if($patient->document_path)
+                                        <a href="{{ asset('storage/' . $patient->document_path) }}" target="_blank"
+                                            class="text-blue-600 hover:underline flex items-center">
+                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path
+                                                    d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z">
+                                                </path>
+                                            </svg>
+                                            Ouvrir PDF
+                                        </a>
+                                    @else
+                                        <span class="text-gray-400 italic text-sm">Aucun document</span>
+                                    @endif
                                 </td>
+
                                 <td class="p-3 border-b">
-                                    <form action="{{ route('patients.destroy', $patient->id) }}" method="POST"
-                                        onsubmit="return confirm('Supprimer ce patient ?');">
-                                        @csrf
-                                        @method('DELETE') <button type="submit"
-                                            class="text-red-600 hover:underline font-bold">
-                                            Supprimer
-                                        </button>
-                                    </form>
-                                    <a href="{{ route('patients.edit', $patient->id) }}"
-                                        class="text-blue-600 hover:underline mr-4 font-bold">
-                                        Modifier
-                                    </a>
+                                    <div class="flex flex-col items-center space-y-2">
+
+                                        <a href="{{ route('patients.edit', $patient->id) }}"
+                                            class="text-blue-600 hover:text-blue-800 font-bold text-sm bg-blue-50 px-3 py-1 rounded w-24 text-center">
+                                            Modifier
+                                        </a>
+
+                                        <form action="{{ route('patients.destroy', $patient->id) }}" method="POST"
+                                            onsubmit="return confirm('Supprimer ce patient ?');" class="w-24">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                class="text-red-600 hover:text-red-800 font-bold text-sm bg-red-50 px-3 py-1 rounded w-full text-center">
+                                                Supprimer
+                                            </button>
+                                        </form>
+
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach

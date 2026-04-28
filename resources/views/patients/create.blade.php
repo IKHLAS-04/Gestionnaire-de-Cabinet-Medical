@@ -40,7 +40,11 @@
                     </div>
                     <div class="mt-4">
                         <label>Document Médical (PDF uniquement)</label>
-                        <input type="file" name="document" class="w-full">
+                        <input type="file" name="document" class="w-full border-gray-300 rounded-md">
+
+                        @error('document')
+                            <p class="text-red-500 text-xs mt-1 font-bold">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div class="mt-6">
                         <button type="submit"
