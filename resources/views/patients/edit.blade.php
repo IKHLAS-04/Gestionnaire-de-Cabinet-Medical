@@ -31,8 +31,8 @@
 
                     <div class="mt-4">
                         <label class="block font-medium text-sm text-gray-700">Résumé du dossier / Notes</label>
-                        <textarea name="antecedents" class="w-full border-gray-300 rounded-md shadow-sm mt-1"
-                            rows="4">{{ $patient->antecedents }}</textarea>
+                        <textarea name="notes" class="w-full border-gray-300 rounded-md shadow-sm mt-1"
+                            rows="4">{{ $patient->notes }}</textarea>
                     </div>
 
                     <div class="mt-6 border-t pt-4">
@@ -59,6 +59,12 @@
                                 </p>
                             </div>
                         @endif
+                    </div>
+                    <div class="mt-4">
+                        <label class="block font-medium text-sm text-gray-700">Date du Prochain Rendez-vous</label>
+                        <input type="datetime-local" name="prochain_rdv"
+                            value="{{ isset($patient) ? $patient->prochain_rdv : '' }}"
+                            class="w-full border-gray-300 rounded-md shadow-sm">
                     </div>
 
                     <button type="submit"

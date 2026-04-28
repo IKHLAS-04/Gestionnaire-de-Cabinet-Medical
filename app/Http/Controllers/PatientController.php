@@ -35,8 +35,9 @@ class PatientController extends Controller
                 'prenom' => 'required|string|max:255',
                 'telephone' => 'required|string|max:20',
                 'date_naissance' => 'required|date',
-                'antecedents' => 'nullable|string',
+                'notes' => 'nullable|string',
                 'document' => 'nullable|file|mimes:pdf|max:2048',
+                'prochain_rdv' => 'nullable|date',
             ],
             [
                 'document.mimes' => 'Le document doit impérativement être au format PDF.',
@@ -88,6 +89,7 @@ class PatientController extends Controller
                     'telephone' => 'required|string|max:20',
                     'notes' => 'nullable|string',
                     'document' => 'nullable|file|mimes:pdf|max:2048',
+                    'prochain_rdv' => 'nullable|date',
                 ],
                 [
                     'document.mimes' => 'Le document doit être au format PDF.',
@@ -97,6 +99,7 @@ class PatientController extends Controller
                 $path = $request->file('document')->store('documents', 'public');
                 $validated['document_path'] = $path;
             }
+            
 
             // 3. Mise à jour dans la base de données
             $patient->update($validated);

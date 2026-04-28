@@ -9,9 +9,10 @@ class Patient extends Model
     protected $fillable = [
         'nom',
         'prenom',
-        'telephone',
+        'prochain_rdv',
+        'telephone', 
         'date_naissance',
-        'antecedents',
-        'document_path',
+        'notes',
+        'document_path',   
     ];
 }

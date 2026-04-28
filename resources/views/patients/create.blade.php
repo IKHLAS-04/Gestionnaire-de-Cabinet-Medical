@@ -34,8 +34,8 @@
                     </div>
 
                     <div class="mt-4">
-                        <label class="block font-medium text-sm text-gray-700">Antécédents médicaux</label>
-                        <textarea name="antecedents" class="w-full border-gray-300 rounded-md shadow-sm"
+                        <label class="block font-medium text-sm text-gray-700">Notes</label>
+                        <textarea name="notes" class="w-full border-gray-300 rounded-md shadow-sm"
                             rows="4"></textarea>
                     </div>
                     <div class="mt-4">
@@ -45,6 +45,12 @@
                         @error('document')
                             <p class="text-red-500 text-xs mt-1 font-bold">{{ $message }}</p>
                         @enderror
+                    </div>
+                    <div class="mt-4">
+                        <label class="block font-medium text-sm text-gray-700">Date du Prochain Rendez-vous</label>
+                        <input type="datetime-local" name="prochain_rdv"
+                            value="{{ isset($patient) ? $patient->prochain_rdv : '' }}"
+                            class="w-full border-gray-300 rounded-md shadow-sm">
                     </div>
                     <div class="mt-6">
                         <button type="submit"

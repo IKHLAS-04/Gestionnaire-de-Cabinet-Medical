@@ -15,7 +15,9 @@
                         <tr class="bg-gray-100">
                             <th class="p-3 border-b">Nom</th>
                             <th class="p-3 border-b">Prénom</th>
+                            <th class="p-3 border-b">Prochain RDV</th>
                             <th class="p-3 border-b">Téléphone</th>
+                            <th class="p-3 border-b">Notes</th>
                             <th class="p-3 border-b">Dossiers</th>
                             <th class="p-3 border-b text-center">Actions</th>
                         </tr>
@@ -25,7 +27,13 @@
                             <tr class="hover:bg-gray-50">
                                 <td class="p-3 border-b">{{ $patient->nom }}</td>
                                 <td class="p-3 border-b">{{ $patient->prenom }}</td>
+                                <td class="p-3 border-b font-semibold text-blue-700">
+                                    {{ $patient->prochain_rdv ? \Carbon\Carbon::parse($patient->prochain_rdv)->format('d/m/Y H:i') : 'Non planifié' }}
+                                </td>
                                 <td class="p-3 border-b">{{ $patient->telephone }}</td>
+                                <td class="p-3 border-b text-sm text-gray-600 italic">
+                                    {{ Str::limit($patient->notes, 30) }}
+                                </td>
 
                                 <td class="p-3 border-b">
                                     @if($patient->document_path)
