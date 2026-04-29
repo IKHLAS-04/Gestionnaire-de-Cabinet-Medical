@@ -27,4 +27,19 @@
             </div>
         </div>
     </div>
+    <div class="mt-8 bg-white p-6 rounded-lg shadow">
+        <h3 class="text-lg font-bold mb-4">📅 Prochains Rendez-vous</h3>
+
+        @foreach($rdvs as $rdv)
+            <div class="flex justify-between items-center border-b py-2">
+                <span class="font-bold text-gray-800">
+                    {{ substr($rdv->nom, 0, 1) }}. {{ substr($rdv->prenom, 0, 1) }}.
+                </span>
+                <span class="text-sm text-blue-600">
+                    {{ \Carbon\Carbon::parse($rdv->prochain_rdv)->format('d/m H:i') }}
+                </span>
+                <a href="{{ route('patients.edit', $rdv->id) }}" class="text-xs bg-gray-100 px-2 py-1 rounded">Dossier</a>
+            </div>
+        @endforeach
+    </div>
 </x-app-layout>
