@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="flex justify-between">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">Liste des Patients</h2>
-            <a href="{{ route('patients.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded-md text-sm"> +
+            <a href="{{ route('patients.create') }}" class="bg-med-blue hover:bg-med-teal text-white px-4 py-2 rounded-md shadow-sm transition"> +
                 Ajouter</a>
         </div>
     </x-slot>
@@ -12,14 +12,14 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="bg-gray-100">
-                            <th class="p-3 border-b">Nom</th>
-                            <th class="p-3 border-b">Prénom</th>
-                            <th class="p-3 border-b">Prochain RDV</th>
-                            <th class="p-3 border-b">Téléphone</th>
-                            <th class="p-3 border-b">Notes</th>
-                            <th class="p-3 border-b">Dossiers</th>
-                            <th class="p-3 border-b text-center">Actions</th>
+                        <tr class="bg-med-green">
+                            <th class="p-3 border-b text-center text-white">Nom</th>
+                            <th class="p-3 border-b text-center text-white">Prénom</th>
+                            <th class="p-3 border-b text-center text-white">Prochain RDV</th>
+                            <th class="p-3 border-b text-center text-white">Téléphone</th>
+                            <th class="p-3 border-b text-center text-white">Notes</th>
+                            <th class="p-3 border-b text-center text-white">Dossiers</th>
+                            <th class="p-3 border-b text-center text-white">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -55,7 +55,7 @@
                                     <div class="flex flex-col items-center space-y-2">
 
                                         <a href="{{ route('patients.edit', $patient->id) }}"
-                                            class="text-blue-600 hover:text-blue-800 font-bold text-sm bg-blue-50 px-3 py-1 rounded w-24 text-center">
+                                            class="text-med-dark font-bold hover:text-med-blue text-sm bg-blue-50 px-3 py-1 rounded w-24 text-center">
                                             Modifier
                                         </a>
 

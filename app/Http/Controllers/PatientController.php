@@ -60,7 +60,8 @@ class PatientController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $patient = \App\Models\Patient::findOrFail($id);
+        return view('patients.show', compact('patient'));
     }
 
     /**

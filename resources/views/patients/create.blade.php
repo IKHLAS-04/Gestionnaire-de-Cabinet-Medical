@@ -54,7 +54,7 @@
                     </div>
                     <div class="mt-6">
                         <button type="submit"
-                            class="mt-6 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow">
+                            class="text-med-light font-bold hover:text-med-blue text-sm bg-med-dark px-3 py-1 rounded shadow w-24 text-center">
                             Enregistrer
                         </button>
                     </div>

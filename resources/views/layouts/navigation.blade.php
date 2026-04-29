@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+<nav x-data="{ open: false }" class="bg-med-green border-b border-med-teal text-white">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -45,7 +45,8 @@
                     </x-slot>
 
                     <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')">
+                        <x-dropdown-link :href="route('profile.edit')"
+                            class="text-med-dark hover:bg-med-light hover:text-med-green font-bold">
                             {{ __('Profile') }}
                         </x-dropdown-link>
 
@@ -54,7 +55,8 @@
                             @csrf
 
                             <x-dropdown-link :href="route('logout')" onclick="event.preventDefault();
-                                                this.closest('form').submit();">
+                                                this.closest('form').submit();"
+                                class="text-med-dark hover:bg-red hover:text-red-600 font-bold">
                                 {{ __('Log Out') }}
                             </x-dropdown-link>
                         </form>
