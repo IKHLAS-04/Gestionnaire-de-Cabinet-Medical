@@ -4,7 +4,7 @@
             {{ __('Dashboard') }}
         </h2>
     </x-slot>
-
+     
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
         <div class="bg-med-blue p-6 rounded-xl shadow-md text-white border-b-4 border-med-teal">
             <h3 class="text-lg font-semibold opacity-80 uppercase tracking-wider">Total Patients</h3>

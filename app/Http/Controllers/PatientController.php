@@ -9,10 +9,18 @@ class PatientController extends Controller
     /**
      * Display a listing of the resource.
      */
+    use Carbon\Carbon;
+
+    // Dans ton DashboardController
     public function index()
     {
-        $patients = \App\Models\Patient::all();
-        return view('patients.index', compact('patients'));
+        // On récupère uniquement les rendez-vous de l'utilisateur connecté pour AUJOURD'HUI
+        $appointments = Appointment::where('user_id', auth()->id())
+            ->whereDate('appointment_date', Carbon::today())
+            ->orderBy('appointment_date', 'asc')
+            ->get();
+
+        return view('dashboard', compact('appointments'));
     }
 
     /**
@@ -100,7 +108,7 @@ class PatientController extends Controller
                 $path = $request->file('document')->store('documents', 'public');
                 $validated['document_path'] = $path;
             }
-            
+
 
             // 3. Mise à jour dans la base de données
             $patient->update($validated);
