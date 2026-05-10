@@ -3,26 +3,27 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Appointment; // Importe le modèle pour les rendez-vous
+use Carbon\Carbon;
 
 class PatientController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    use Carbon\Carbon;
+    
 
     // Dans ton DashboardController
-    public function index()
+    ppublic function index()
     {
-        // On récupère uniquement les rendez-vous de l'utilisateur connecté pour AUJOURD'HUI
+        // Maintenant, Appointment et Carbon sont reconnus
         $appointments = Appointment::where('user_id', auth()->id())
-            ->whereDate('appointment_date', Carbon::today())
+            ->whereDate('appointment_date', Carbon::today()) 
             ->orderBy('appointment_date', 'asc')
             ->get();
 
         return view('dashboard', compact('appointments'));
     }
-
     /**
      * Show the form for creating a new resource.
      */
