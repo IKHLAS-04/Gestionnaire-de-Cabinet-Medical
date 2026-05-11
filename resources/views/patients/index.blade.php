@@ -2,7 +2,8 @@
     <x-slot name="header">
         <div class="flex justify-between">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">Liste des Patients</h2>
-            <a href="{{ route('patients.create') }}" class="bg-med-blue hover:bg-med-teal text-white px-4 py-2 rounded-md shadow-sm transition"> +
+            <a href="{{ route('patients.create') }}"
+                class="bg-med-blue hover:bg-med-teal text-white px-4 py-2 rounded-md shadow-sm transition"> +
                 Ajouter</a>
         </div>
     </x-slot>
@@ -27,8 +28,12 @@
                             <tr class="hover:bg-gray-50">
                                 <td class="p-3 border-b">{{ $patient->nom }}</td>
                                 <td class="p-3 border-b">{{ $patient->prenom }}</td>
-                                <td class="p-3 border-b font-semibold text-blue-700">
-                                    {{ $patient->prochain_rdv ? \Carbon\Carbon::parse($patient->prochain_rdv)->format('d/m/Y H:i') : 'Non planifié' }}
+                                <td>
+                                    @if($patient->appointments->isNotEmpty())
+                                        {{ \Carbon\Carbon::parse($patient->appointments->last()->appointment_date)->format('d/m/Y H:i') }}
+                                    @else
+                                        <span class="p-3 border-b font-semibold text-blue-700">Non planifié</span>
+                                    @endif
                                 </td>
                                 <td class="p-3 border-b">{{ $patient->telephone }}</td>
                                 <td class="p-3 border-b text-sm text-gray-600 italic">

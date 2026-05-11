@@ -11,18 +11,16 @@ class PatientController extends Controller
     /**
      * Display a listing of the resource.
      */
-    
+
 
     // Dans ton DashboardController
-    ppublic function index()
+    public function index()
     {
-        // Maintenant, Appointment et Carbon sont reconnus
-        $appointments = Appointment::where('user_id', auth()->id())
-            ->whereDate('appointment_date', Carbon::today()) 
-            ->orderBy('appointment_date', 'asc')
-            ->get();
+        // On récupère tous les patients appartenant au médecin connecté
+        $patients = \App\Models\Patient::where('user_id', auth()->id())->get();
 
-        return view('dashboard', compact('appointments'));
+        // On renvoie vers la vue LISTE des patients, pas le dashboard !
+        return view('patients.index', compact('patients'));
     }
     /**
      * Show the form for creating a new resource.
@@ -36,34 +34,48 @@ class PatientController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    // On vérifie que les données sont conformes pour éviter les injections
     {
-        $validated = $request->validate(
-            [
-                'nom' => 'required|string|max:255',
-                'prenom' => 'required|string|max:255',
-                'telephone' => 'required|string|max:20',
-                'date_naissance' => 'required|date',
-                'notes' => 'nullable|string',
-                'document' => 'nullable|file|mimes:pdf|max:2048',
-                'prochain_rdv' => 'nullable|date',
-            ],
-            [
-                'document.mimes' => 'Le document doit impérativement être au format PDF.',
-                'document.max' => 'Le fichier est trop lourd (maximum 2Mo).',
-            ]
-        );
+        // 1. Validation
+        $validated = $request->validate([
+            'nom' => 'required|string|max:255',
+            'prenom' => 'required|string|max:255',
+            'telephone' => 'required|string|max:20',
+            'date_naissance' => 'required|date',
+            'notes' => 'nullable|string',
+            'document' => 'nullable|file|mimes:pdf|max:2048',
+            'prochain_rdv' => 'nullable|date',
+            'prix' => 'nullable|numeric',
+        ], [
+            'document.mimes' => 'Le document doit impérativement être au format PDF.',
+            'document.max' => 'Le fichier est trop lourd (maximum 2Mo).',
+        ]);
 
+        // 2. Gestion du fichier PDF
         if ($request->hasFile('document')) {
-            $path = $request->file('document')->store('documents', 'public');
-            $validated['document_path'] = $path;
+            $validated['document_path'] = $request->file('document')->store('documents', 'public');
         }
-        //Création du patient dans la base 
-        \App\Models\Patient::create($validated);
 
-        return redirect()->route('dashboard')->with('success', 'Patient ajouté avec succés !');
+        // 3. Ajout du user_id
+        $validated['user_id'] = auth()->id();
+
+        // 4. CRÉATION DU PATIENT
+        // On retire 'prochain_rdv' ET 'prix' car ils vont dans la table appointments
+        $patientData = collect($validated)->except(['prochain_rdv', 'prix'])->toArray();
+        $patient = \App\Models\Patient::create($patientData);
+
+        // 5. CRÉATION DU RENDEZ-VOUS
+        if (!empty($validated['prochain_rdv'])) {
+            \App\Models\Appointment::create([
+                'user_id' => auth()->id(),
+                'patient_id' => $patient->id,
+                'appointment_date' => $validated['prochain_rdv'],
+                'prix' => $validated['prix'] ?? 0,
+                'motif' => 'Première consultation',
+            ]);
+        }
+
+        return redirect()->route('patients.index')->with('success', 'Patient et rendez-vous créés !');
     }
-
     /**
      * Display the specified resource.
      */

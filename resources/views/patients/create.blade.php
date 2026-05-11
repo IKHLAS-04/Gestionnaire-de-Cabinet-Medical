@@ -35,8 +35,7 @@
 
                     <div class="mt-4">
                         <label class="block font-medium text-sm text-gray-700">Notes</label>
-                        <textarea name="notes" class="w-full border-gray-300 rounded-md shadow-sm"
-                            rows="4"></textarea>
+                        <textarea name="notes" class="w-full border-gray-300 rounded-md shadow-sm" rows="4"></textarea>
                     </div>
                     <div class="mt-4">
                         <label>Document Médical (PDF uniquement)</label>
@@ -51,6 +50,11 @@
                         <input type="datetime-local" name="prochain_rdv"
                             value="{{ isset($patient) ? $patient->prochain_rdv : '' }}"
                             class="w-full border-gray-300 rounded-md shadow-sm">
+                    </div>
+                    <div class="mt-4">
+                        <label class="block text-sm font-medium text-gray-700">Prix de la consultation</label>
+                        <input type="number" name="prix" step="0.01"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" placeholder="Ex: 300">
                     </div>
                     <div class="mt-6">
                         <button type="submit"

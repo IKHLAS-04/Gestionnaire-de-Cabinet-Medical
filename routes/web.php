@@ -8,21 +8,16 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    // 1. Tes statistiques actuelles (Total et Récents)
-    $stats = [
-        'total' => \App\Models\Patient::count(),
-        'recents' => \App\Models\Patient::latest()->take(5)->get(),
-    ];
-
-    // 2. LA NOUVEAUTÉ : Tes futurs rendez-vous pour l'agenda
-    $rdvs = \App\Models\Patient::whereNotNull('prochain_rdv')
-        ->where('prochain_rdv', '>=', now())
-        ->orderBy('prochain_rdv', 'asc')
-        ->take(5)
+    // 1. On récupère les rendez-vous du jour via la table appointments
+    // On utilise eager loading (with('patient')) pour éviter trop de requêtes SQL
+    $appointments = \App\Models\Appointment::with('patient')
+        ->where('user_id', auth()->id())
+        ->whereDate('appointment_date', \Carbon\Carbon::today())
+        ->orderBy('appointment_date', 'asc')
         ->get();
 
-    // 3. On envoie les DEUX variables à la vue
-    return view('dashboard', compact('stats', 'rdvs'));
+    // 2. On envoie uniquement $appointments à la vue
+    return view('dashboard', compact('appointments'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
