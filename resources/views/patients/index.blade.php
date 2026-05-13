@@ -19,7 +19,6 @@
                             <th class="p-3 border-b text-center text-white">Prochain RDV</th>
                             <th class="p-3 border-b text-center text-white">Téléphone</th>
                             <th class="p-3 border-b text-center text-white">Notes</th>
-                            <th class="p-3 border-b text-center text-white">Dossiers</th>
                             <th class="p-3 border-b text-center text-white">Actions</th>
                         </tr>
                     </thead>
@@ -38,22 +37,6 @@
                                 <td class="p-3 border-b">{{ $patient->telephone }}</td>
                                 <td class="p-3 border-b text-sm text-gray-600 italic">
                                     {{ Str::limit($patient->notes, 30) }}
-                                </td>
-
-                                <td class="p-3 border-b">
-                                    @if($patient->document_path)
-                                        <a href="{{ asset('storage/' . $patient->document_path) }}" target="_blank"
-                                            class="text-blue-600 hover:underline flex items-center">
-                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path
-                                                    d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z">
-                                                </path>
-                                            </svg>
-                                            Ouvrir PDF
-                                        </a>
-                                    @else
-                                        <span class="text-gray-400 italic text-sm">Aucun document</span>
-                                    @endif
                                 </td>
 
                                 <td class="p-3 border-b">

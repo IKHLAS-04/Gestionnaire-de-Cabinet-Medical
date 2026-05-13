@@ -20,24 +20,6 @@
                             </p>
                         </div>
 
-                        <div class="space-y-4">
-                            <h3 class="text-lg font-bold text-med-blue border-b pb-2">Documents attachés</h3>
-                            @if($patient->document_path)
-                                <a href="{{ asset('storage/' . $patient->document_path) }}" target="_blank"
-                                    class="inline-flex items-center text-blue-600 hover:underline">
-                                    <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path
-                                            d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z">
-                                        </path>
-                                    </svg>
-                                    Consulter le dossier PDF
-                                </a>
-                            @else
-                                <p class="text-gray-400 italic">Aucun document numérisé.</p>
-                            @endif
-                        </div>
-                    </div>
-
                     <div class="mt-8">
                         <h3 class="text-lg font-bold text-med-blue border-b pb-2">Notes & Antécédents</h3>
                         <div class="mt-4 p-4 bg-med-light/20 rounded-lg italic text-gray-700">
@@ -57,7 +39,7 @@
                         </a>
 
                         <a href="{{ route('patients.edit', $patient->id) }}"
-                            class="bg-med-blue text-white px-4 py-2 rounded shadow font-bold hover:bg-med-teal">
+                            class="px-8 py-3 bg-med-dark text-white font-bold rounded-full hover:shadow-lg transform hover:-translate-y-1 transition-all duration-200">
                             Modifier le dossier
                         </a>
                     </div>

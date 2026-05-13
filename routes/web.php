@@ -11,7 +11,6 @@ Route::get('/dashboard', function () {
     // 1. On récupère les rendez-vous du jour via la table appointments
     // On utilise eager loading (with('patient')) pour éviter trop de requêtes SQL
     $appointments = \App\Models\Appointment::with('patient')
-        ->where('user_id', auth()->id())
         ->whereDate('appointment_date', \Carbon\Carbon::today())
         ->orderBy('appointment_date', 'asc')
         ->get();

@@ -15,9 +15,7 @@ class Patient extends Model
         'prochain_rdv',
         'telephone', 
         'date_naissance',
-        'notes',
-        'document_path',  
-        'user_id', 
+        'notes', 
     ];
 }
 

@@ -16,11 +16,13 @@ class PatientController extends Controller
     // Dans ton DashboardController
     public function index()
     {
-        // On récupère tous les patients appartenant au médecin connecté
-        $patients = \App\Models\Patient::where('user_id', auth()->id())->get();
+        // On récupère tous les patients car on a supprimé user_id
+        $patients = \App\Models\Patient::all();
 
-        // On renvoie vers la vue LISTE des patients, pas le dashboard !
-        return view('patients.index', compact('patients'));
+        // On s'assure que la variable arrive bien à la vue
+        return view('patients.index', [
+            'patients' => $patients
+        ]);
     }
     /**
      * Show the form for creating a new resource.
@@ -35,38 +37,33 @@ class PatientController extends Controller
      */
     public function store(Request $request)
     {
+
         // 1. Validation
         $validated = $request->validate([
             'nom' => 'required|string|max:255',
             'prenom' => 'required|string|max:255',
             'telephone' => 'required|string|max:20',
             'date_naissance' => 'required|date',
-            'notes' => 'nullable|string',
-            'document' => 'nullable|file|mimes:pdf|max:2048',
+            'notes' => 'nullable|string', // <--- IL DOIT ÊTRE ICI
             'prochain_rdv' => 'nullable|date',
             'prix' => 'nullable|numeric',
-        ], [
-            'document.mimes' => 'Le document doit impérativement être au format PDF.',
-            'document.max' => 'Le fichier est trop lourd (maximum 2Mo).',
         ]);
 
-        // 2. Gestion du fichier PDF
-        if ($request->hasFile('document')) {
-            $validated['document_path'] = $request->file('document')->store('documents', 'public');
-        }
 
-        // 3. Ajout du user_id
-        $validated['user_id'] = auth()->id();
 
         // 4. CRÉATION DU PATIENT
-        // On retire 'prochain_rdv' ET 'prix' car ils vont dans la table appointments
-        $patientData = collect($validated)->except(['prochain_rdv', 'prix'])->toArray();
-        $patient = \App\Models\Patient::create($patientData);
 
+        $patient = new \App\Models\Patient();
+        $patient->nom = $request->nom;
+        $patient->prenom = $request->prenom;
+        $patient->telephone = $request->telephone;
+        $patient->date_naissance = $request->date_naissance;
+        $patient->notes = $request->notes;
+        $patient->fill($validated);
+        $patient->save();
         // 5. CRÉATION DU RENDEZ-VOUS
         if (!empty($validated['prochain_rdv'])) {
             \App\Models\Appointment::create([
-                'user_id' => auth()->id(),
                 'patient_id' => $patient->id,
                 'appointment_date' => $validated['prochain_rdv'],
                 'prix' => $validated['prix'] ?? 0,
@@ -97,43 +94,36 @@ class PatientController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        try {
-            // 1. On cherche le patient
-            $patient = \App\Models\Patient::findOrFail($id);
+        // 1. On récupère le patient
+        $patient = \App\Models\Patient::findOrFail($id);
 
-            // 2. Validation (Sécurité : on vérifie les nouvelles données)
-            $validated = $request->validate(
+        // 2. On assigne CHAQUE champ manuellement (sans passer par validation pour ce test)
+        $patient->nom = $request->nom;
+        $patient->prenom = $request->prenom;
+        $patient->telephone = $request->telephone;
+        $patient->date_naissance = $request->date_naissance;
+        $patient->notes = $request->notes;
+        // On sauvegarde d'abord les infos du patient (Nom, Prénom, etc.)
+        $patient->save();
+
+        // On ne met à jour le rendez-vous QUE si une date a été saisie
+        if ($request->filled('prochain_rdv')) {
+            $patient->appointments()->updateOrCreate(
+                ['patient_id' => $patient->id],
                 [
-                    'nom' => 'required|string|max:255',
-                    'prenom' => 'required|string|max:255',
-                    'telephone' => 'required|string|max:20',
-                    'notes' => 'nullable|string',
-                    'document' => 'nullable|file|mimes:pdf|max:2048',
-                    'prochain_rdv' => 'nullable|date',
-                ],
-                [
-                    'document.mimes' => 'Le document doit être au format PDF.',
+                    'appointment_date' => $request->prochain_rdv,
+                    'motif' => $request->input('motif', 'Consultation') // Prend le motif du formulaire, sinon met 'Consultation' par défaut
                 ]
             );
-            if ($request->hasFile('document')) {
-                $path = $request->file('document')->store('documents', 'public');
-                $validated['document_path'] = $path;
-            }
-
-
-            // 3. Mise à jour dans la base de données
-            $patient->update($validated);
-
-            // 4. Redirection avec message de succès
-            return redirect()->route('patients.index')->with('success', 'La fiche du patient a été mise à jour !');
-
-        } catch (\Exception $e) {
-            return redirect()->route('patients.index')->with('error', 'Erreur lors de la mise à jour : ' . $e->getMessage());
         }
-    }
 
+        // 4. On nettoie tout
+        \Illuminate\Support\Facades\Artisan::call('view:clear');
+
+        return redirect()->route('patients.index')->with('success', 'Fiche mise à jour en base de données !');
+    }
     /**
      * Remove the specified resource from storage.
      */

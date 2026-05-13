@@ -8,7 +8,6 @@ class Appointment extends Model
 {
     // On liste les colonnes que Laravel a le droit d'écrire d'un coup
     protected $fillable = [
-        'user_id',
         'patient_id',
         'appointment_date',
         'prix',

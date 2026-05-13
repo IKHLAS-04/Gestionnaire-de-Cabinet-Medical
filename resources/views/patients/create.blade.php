@@ -38,14 +38,6 @@
                         <textarea name="notes" class="w-full border-gray-300 rounded-md shadow-sm" rows="4"></textarea>
                     </div>
                     <div class="mt-4">
-                        <label>Document Médical (PDF uniquement)</label>
-                        <input type="file" name="document" class="w-full border-gray-300 rounded-md">
-
-                        @error('document')
-                            <p class="text-red-500 text-xs mt-1 font-bold">{{ $message }}</p>
-                        @enderror
-                    </div>
-                    <div class="mt-4">
                         <label class="block font-medium text-sm text-gray-700">Date du Prochain Rendez-vous</label>
                         <input type="datetime-local" name="prochain_rdv"
                             value="{{ isset($patient) ? $patient->prochain_rdv : '' }}"
