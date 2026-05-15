@@ -19,6 +19,7 @@
                             <th class="p-3 border-b text-center text-white">Prochain RDV</th>
                             <th class="p-3 border-b text-center text-white">Téléphone</th>
                             <th class="p-3 border-b text-center text-white">Notes</th>
+                            <th class="p-3 border-b text-center text-white">Motif de rendez-vous</th>
                             <th class="p-3 border-b text-center text-white">Actions</th>
                         </tr>
                     </thead>
@@ -31,14 +32,16 @@
                                     @if($patient->appointments->isNotEmpty())
                                         {{ \Carbon\Carbon::parse($patient->appointments->last()->appointment_date)->format('d/m/Y H:i') }}
                                     @else
-                                        <span class="p-3 border-b font-semibold text-blue-700">Non planifié</span>
+                                        <span class="p-3 border-b font-semibold text-med-dark-700">Non planifié</span>
                                     @endif
                                 </td>
                                 <td class="p-3 border-b">{{ $patient->telephone }}</td>
                                 <td class="p-3 border-b text-sm text-gray-600 italic">
                                     {{ Str::limit($patient->notes, 30) }}
                                 </td>
-
+                                <td class="p-3 border-b">   
+                                {{ $patient->appointments->first()->motif ?? '' }}      
+                                </td>
                                 <td class="p-3 border-b">
                                     <div class="flex flex-col items-center space-y-2">
 

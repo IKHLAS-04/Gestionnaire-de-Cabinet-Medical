@@ -43,6 +43,13 @@
                             value="{{ isset($patient) ? $patient->prochain_rdv : '' }}"
                             class="w-full border-gray-300 rounded-md shadow-sm">
                     </div>
+                    <div class="mb-4">
+                        <label class="block font-medium text-sm text-gray-700">Motif du rendez-vous</label>
+                        <!-- Remplace la ligne 48 par celle-ci -->
+                        <input type="text" name="motif"
+                            value="{{ isset($patient) ? ($patient->appointments->first()->motif ?? '') : '' }}"
+                            class="w-full border-gray-300 rounded-md shadow-sm">
+                    </div>
                     <div class="mt-4">
                         <label class="block text-sm font-medium text-gray-700">Prix de la consultation</label>
                         <input type="number" name="prix" step="0.01"

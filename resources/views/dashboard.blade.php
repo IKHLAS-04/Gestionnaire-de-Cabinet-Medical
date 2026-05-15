@@ -27,7 +27,7 @@
         </div>
     </div>
     <div class="mt-8 bg-white p-6 rounded-lg shadow-md border-t-4 border-med-green">
-        <h3 class="text-lg font-bold mb-4 text-med-dark">📅 Prochains Rendez-vous</h3>
+        <h3 class="text-lg font-bold mb-4 text-med-dark">📅 Rendez-vous d'aujourd'hui</h3>
 
         @foreach($appointments as $rdv)
             <div

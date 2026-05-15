@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Appointment; // Importe le modèle pour les rendez-vous
 use Carbon\Carbon;
+use App\Models\Patient;
 
 class PatientController extends Controller
 {
@@ -16,13 +17,10 @@ class PatientController extends Controller
     // Dans ton DashboardController
     public function index()
     {
-        // On récupère tous les patients car on a supprimé user_id
-        $patients = \App\Models\Patient::all();
-
-        // On s'assure que la variable arrive bien à la vue
-        return view('patients.index', [
-            'patients' => $patients
-        ]);
+        $appointments = Appointment::whereHas('patient', function ($query) {
+            $query->where('user_id', auth()->id());
+        })->get();
+        return view('appointments.index', compact('appointments'));
     }
     /**
      * Show the form for creating a new resource.
@@ -38,36 +36,34 @@ class PatientController extends Controller
     public function store(Request $request)
     {
 
-        // 1. Validation
-        $validated = $request->validate([
-            'nom' => 'required|string|max:255',
-            'prenom' => 'required|string|max:255',
-            'telephone' => 'required|string|max:20',
+        // 1. Récupération des données validées (inclut 'prochain_rdv' venant du formulaire)
+        $data = $request->validate([
+            'nom' => 'required|string',
+            'prenom' => 'required|string',
+            'telephone' => 'required',
             'date_naissance' => 'required|date',
-            'notes' => 'nullable|string', // <--- IL DOIT ÊTRE ICI
-            'prochain_rdv' => 'nullable|date',
+            'notes' => 'nullable|string',
+            'prochain_rdv' => 'nullable',
             'prix' => 'nullable|numeric',
         ]);
-
-
-
-        // 4. CRÉATION DU PATIENT
-
         $patient = new \App\Models\Patient();
-        $patient->nom = $request->nom;
-        $patient->prenom = $request->prenom;
-        $patient->telephone = $request->telephone;
-        $patient->date_naissance = $request->date_naissance;
-        $patient->notes = $request->notes;
-        $patient->fill($validated);
+        // 2. Extraction de la date pour la table 'appointments'
+        $prochainRdv = $data['prochain_rdv'] ?? null;
+
+        // 3. Suppression du champ pour éviter l'erreur "Column not found" dans la table 'patients'
+        unset($data['prochain_rdv']);
+
+        // 4. Hydratation et sauvegarde sécurisée du patient
+        $patient->fill($data);
+        $patient->user_id = auth()->id();
         $patient->save();
-        // 5. CRÉATION DU RENDEZ-VOUS
-        if (!empty($validated['prochain_rdv'])) {
-            \App\Models\Appointment::create([
-                'patient_id' => $patient->id,
-                'appointment_date' => $validated['prochain_rdv'],
+
+        // 5. Création automatique du rendez-vous lié dans la table dédiée
+        if ($prochainRdv) {
+            $patient->appointments()->create([
+                'appointment_date' => $prochainRdv,
                 'prix' => $validated['prix'] ?? 0,
-                'motif' => 'Première consultation',
+                'motif' => 'Consultation'
             ]);
         }
 

@@ -16,6 +16,11 @@ class Patient extends Model
         'telephone', 
         'date_naissance',
         'notes', 
+        'user_id',
     ];
+    public function user()
+{
+    return $this->belongsTo(User::class);
+}
 }
 
