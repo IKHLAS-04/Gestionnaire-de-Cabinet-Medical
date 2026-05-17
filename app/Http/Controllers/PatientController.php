@@ -17,10 +17,11 @@ class PatientController extends Controller
     // Dans ton DashboardController
     public function index()
     {
+        $patients = Patient::where('user_id', auth()->id())->get();
         $appointments = Appointment::whereHas('patient', function ($query) {
             $query->where('user_id', auth()->id());
         })->get();
-        return view('appointments.index', compact('appointments'));
+        return view('patients.index', compact('patients', 'appointments'));
     }
     /**
      * Show the form for creating a new resource.
@@ -44,14 +45,18 @@ class PatientController extends Controller
             'date_naissance' => 'required|date',
             'notes' => 'nullable|string',
             'prochain_rdv' => 'nullable',
+            'motif' => 'nullable|string',
             'prix' => 'nullable|numeric',
         ]);
         $patient = new \App\Models\Patient();
         // 2. Extraction de la date pour la table 'appointments'
         $prochainRdv = $data['prochain_rdv'] ?? null;
+        $motifRdv = $data['motif'] ?? 'Consultation';
 
         // 3. Suppression du champ pour éviter l'erreur "Column not found" dans la table 'patients'
         unset($data['prochain_rdv']);
+        unset($data['motif']); // 👈 2. On l'enlève pour ne pas bloquer la table patients
+        unset($data['prix']);
 
         // 4. Hydratation et sauvegarde sécurisée du patient
         $patient->fill($data);
@@ -62,8 +67,8 @@ class PatientController extends Controller
         if ($prochainRdv) {
             $patient->appointments()->create([
                 'appointment_date' => $prochainRdv,
-                'prix' => $validated['prix'] ?? 0,
-                'motif' => 'Consultation'
+                'prix' => $request->prix ?? 0,
+                'motif' => $motifRdv,
             ]);
         }
 

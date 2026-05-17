@@ -39,8 +39,12 @@
                                 <td class="p-3 border-b text-sm text-gray-600 italic">
                                     {{ Str::limit($patient->notes, 30) }}
                                 </td>
-                                <td class="p-3 border-b">   
-                                {{ $patient->appointments->first()->motif ?? '' }}      
+                                <td class="p-3 border-b">
+                                    @if($patient->appointments && $patient->appointments->isNotEmpty())
+                                        {{ $patient->appointments->first()->motif }}
+                                    @else
+                                        Pas de rendez-vous
+                                    @endif
                                 </td>
                                 <td class="p-3 border-b">
                                     <div class="flex flex-col items-center space-y-2">
