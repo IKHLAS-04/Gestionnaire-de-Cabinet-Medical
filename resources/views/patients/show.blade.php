@@ -12,6 +12,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="space-y-4">
                             <h3 class="text-lg font-bold text-med-blue border-b pb-2">Informations Personnelles</h3>
+                            <p><strong>Date de naissance :</strong> {{ $patient->date_naissance }}</p>
                             <p><strong>Téléphone :</strong> {{ $patient->telephone }}</p>
                             <p><strong>Prochain RDV :</strong>
                                 <span class="text-med-teal font-bold">

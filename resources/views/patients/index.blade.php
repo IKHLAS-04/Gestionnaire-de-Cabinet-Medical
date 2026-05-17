@@ -17,6 +17,7 @@
                             <th class="p-3 border-b text-center text-white">Nom</th>
                             <th class="p-3 border-b text-center text-white">Prénom</th>
                             <th class="p-3 border-b text-center text-white">Prochain RDV</th>
+                            <th class="p-3 border-b text-center text-white">Date de naissance</th>
                             <th class="p-3 border-b text-center text-white">Téléphone</th>
                             <th class="p-3 border-b text-center text-white">Notes</th>
                             <th class="p-3 border-b text-center text-white">Motif de rendez-vous</th>
@@ -35,6 +36,7 @@
                                         <span class="p-3 border-b font-semibold text-med-dark-700">Non planifié</span>
                                     @endif
                                 </td>
+                                <td class="p-3 border-b">{{ $patient->date_naissance }}</td>
                                 <td class="p-3 border-b">{{ $patient->telephone }}</td>
                                 <td class="p-3 border-b text-sm text-gray-600 italic">
                                     {{ Str::limit($patient->notes, 30) }}
